@@ -15,15 +15,13 @@ import BaseCheckbox from '../components/base/BaseCheckbox.vue'
       <h1>Crie sua conta</h1>
       <div class="form">
         <BaseInput type="text" placeholder="Seu nome" icon="fa-solid fa-user" />
-
         <BaseInput type="email" placeholder="Seu e-mail" icon="fa-solid fa-envelope" />
-
         <BaseInput type="text" placeholder="CRMV-UF" icon="fa-solid fa-id-card" />
-
         <BaseInput type="password" placeholder="Senha" icon="fa-solid fa-lock" />
-
         <BaseInput type="password" placeholder="Confirme sua senha" icon="fa-solid fa-lock" />
+
         <BaseCheckbox text="Concordo com os termos e condições de uso do Petly." />
+
         <BaseButton label="Criar conta" />
         <div class="aditional-actions">
           <BaseText>
@@ -68,7 +66,7 @@ import BaseCheckbox from '../components/base/BaseCheckbox.vue'
 .form {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
   width: 400px;
 }
 
