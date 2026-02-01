@@ -4,6 +4,7 @@ import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import ForgotPassword from '../views/ForgotPassword.vue'
 import AuthTest from '../views/AuthTest.vue'
+import Home from '../views/Home.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,6 +33,11 @@ const router = createRouter({
       path: '/authtest',
       name: 'authtest',
       component: AuthTest,
+    },
+    {
+      path: '/home',
+      name: 'home',
+      component: Home,
     },
   ],
 })
