@@ -88,7 +88,7 @@ function onInput(event: Event) {
 input {
   font-family: var(--base-font);
   border-radius: 8px;
-  border-width: 1px;
+  border: 1px solid rgb(196, 196, 196);
 }
 
 .label {
