@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import BaseInput from '../components/base/BaseInput.vue'
 import BaseButton from '../components/base/BaseButton.vue'
-import BaseText from '../components/base/BaseText.vue'
 import BaseCheckbox from '../components/base/BaseCheckbox.vue'
 </script>
 
@@ -10,23 +9,23 @@ import BaseCheckbox from '../components/base/BaseCheckbox.vue'
     <section class="image">
       <img class="banner" src="../../public/login_image.png" />
     </section>
-    <section class="login-area">
-      <img class="logo" src="../../public/logo.png" />
-      <h1>Crie sua conta</h1>
+    <section class="register-area">
+      <img class="logo" test-id="logo-petly" src="../../public/logo.png" />
+      <h1 class="page-title" test-id="titulo-formulario">Crie sua conta</h1>
       <div class="form">
-        <BaseInput type="text" placeholder="Seu nome" icon="fa-solid fa-user" />
-        <BaseInput type="email" placeholder="Seu e-mail" icon="fa-solid fa-envelope" />
-        <BaseInput type="text" placeholder="CRMV-UF" icon="fa-solid fa-id-card" />
-        <BaseInput type="password" placeholder="Senha" icon="fa-solid fa-lock" />
-        <BaseInput type="password" placeholder="Confirme sua senha" icon="fa-solid fa-lock" />
+        <BaseInput type="text" test-id="ipt-nome" placeholder="Seu nome" icon="fa-solid fa-user" />
+        <BaseInput type="email" test-id="ipt-email" placeholder="Seu e-mail" icon="fa-solid fa-envelope" />
+        <BaseInput type="text" test-id="ipt-crmv" placeholder="CRMV-UF" icon="fa-solid fa-id-card" />
+        <BaseInput type="password" test-id="ipt-senha" placeholder="Senha" icon="fa-solid fa-lock" />
+        <BaseInput type="password" test-id="ipt-confirmacao-senha" placeholder="Confirme sua senha" icon="fa-solid fa-lock" />
 
-        <BaseCheckbox text="Concordo com os termos e condições de uso do Petly." />
+        <BaseCheckbox class="checkbox" test-id="ckbox-confirmacao-termos" text="Concordo com os termos e condições de uso do Petly." />
 
-        <BaseButton label="Criar conta" />
+        <BaseButton test-id="btn-criar-conta" label="Criar conta" />
         <div class="aditional-actions">
-          <BaseText>
+          <p class="regular-text" test-id="btn-cancelar">
             <RouterLink to="/login">Cancelar</RouterLink>
-          </BaseText>
+          </p>
         </div>
       </div>
     </section>
@@ -54,7 +53,7 @@ import BaseCheckbox from '../components/base/BaseCheckbox.vue'
   height: 620px;
 }
 
-.login-area {
+.register-area {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   border-radius: 32px;
   padding: 40px 75px;
@@ -66,7 +65,7 @@ import BaseCheckbox from '../components/base/BaseCheckbox.vue'
 .form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 14px;
   width: 400px;
 }
 
@@ -76,8 +75,8 @@ import BaseCheckbox from '../components/base/BaseCheckbox.vue'
   justify-content: center;
 }
 
-h1 {
-  font-family: var(--base-font);
-  color: #1976d2;
+.page-title {
+  color: var(--primary-color);
+  padding: 20px 0px;
 }
 </style>

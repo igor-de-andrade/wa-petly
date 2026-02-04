@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import BaseInput from '../components/base/BaseInput.vue'
 import BaseButton from '../components/base/BaseButton.vue'
-import BaseText from '../components/base/BaseText.vue'
 </script>
 
 <template>
@@ -9,22 +8,23 @@ import BaseText from '../components/base/BaseText.vue'
     <section class="image">
       <img class="banner" src="../../public/forgotpassword_image.png" />
     </section>
-    <section class="login-area">
-      <img class="logo" src="../../public/logo.png" />
-      <h1>Esqueceu sua senha?</h1>
+    <section class="forgot-password-area">
+      <img class="logo" src="../../public/logo.png" test-id="logo-petly" />
+      <h1 class="page-title" test-id="titulo-formulario">Esqueceu sua senha?</h1>
       <div class="form">
         <BaseInput
           type="email"
+          test-id="ipt-email"
           placeholder="Digite seu e-mail cadastrado no Petly"
           icon="fa-solid fa-envelope"
         />
 
-        <BaseButton label="Enviar instruções" />
+        <BaseButton label="Enviar instruções" test-id="btn-enviar-instrucoes" />
 
         <div class="aditional-actions">
-          <BaseText>
+          <p class="regular-text" test-id="btn-cancelar">
             <RouterLink to="/login">Cancelar</RouterLink>
-          </BaseText>
+          </p>
         </div>
       </div>
     </section>
@@ -52,7 +52,7 @@ import BaseText from '../components/base/BaseText.vue'
   height: 620px;
 }
 
-.login-area {
+.forgot-password-area {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   border-radius: 32px;
   padding: 125px 75px;
@@ -74,8 +74,8 @@ import BaseText from '../components/base/BaseText.vue'
   justify-content: center;
 }
 
-h1 {
-  font-family: var(--base-font);
-  color: #1976d2;
+.page-title {
+  color: var(--primary-color);
+  padding: 20px 0px;
 }
 </style>

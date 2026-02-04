@@ -16,5 +16,6 @@ defineProps<{
   display: flex;
   font-family: var(--base-font);
   font-size: 14px;
+  gap: 5px;
 }
 </style>
