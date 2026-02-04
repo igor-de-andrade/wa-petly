@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import BaseInput from '../components/base/BaseInput.vue'
 import BaseButton from '../components/base/BaseButton.vue'
-import BaseText from '../components/base/BaseText.vue'
 </script>
 
 <template>
@@ -10,25 +9,25 @@ import BaseText from '../components/base/BaseText.vue'
       <img class="banner" src="../../public/login_image.png" />
     </section>
     <section class="login-area">
-      <img class="logo" src="../../public/logo.png" />
-      <h1>Olá, bem-vindo(a) ao Petly!</h1>
+      <img class="logo" test-id="logo-petly" src="../../public/logo.png" />
+      <h1 class="page-title" test-id="titulo-formulario">Olá, bem-vindo(a) ao Petly!</h1>
       <div class="form">
-        <BaseInput type="email" placeholder="Digite seu e-mail" icon="fa-solid fa-envelope" />
+        <BaseInput type="email" test-id="ipt-email" placeholder="Digite seu e-mail" icon="fa-solid fa-envelope" />
 
-        <BaseInput type="password" placeholder="Digite sua senha" icon="fa-solid fa-lock" />
+        <BaseInput type="password" test-id="ipt-senha" placeholder="Digite sua senha" icon="fa-solid fa-lock" />
 
-        <BaseButton label="Entrar" />
+        <BaseButton test-id="btn-entrar" label="Entrar" />
 
         <div class="aditional-actions">
-          <BaseText>
+          <p class="regular-text" test-id="txt-esqueceu-senha">
             Esqueceu sua senha?
             <RouterLink to="/forgotpassword">Clique aqui</RouterLink>
-          </BaseText>
+          </p>
 
-          <BaseText>
+          <p class="regular-text" test-id="txt-criar-conta">
             Crie sua conta no
             <RouterLink to="/register">Petly</RouterLink>
-          </BaseText>
+          </p>
         </div>
       </div>
     </section>
@@ -78,8 +77,8 @@ import BaseText from '../components/base/BaseText.vue'
   justify-content: space-between;
 }
 
-h1 {
-  font-family: var(--base-font);
-  color: #1976d2;
+.page-title {
+  color: var(--primary-color);
+  padding: 20px 0px;
 }
 </style>
