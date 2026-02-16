@@ -2,6 +2,33 @@
 
 This template should help get you started developing with Vue 3 in Vite.
 
+## Connecting to the backend API
+
+The frontend is expected to talk to a Java/Spring API running locally on port 8080 or in production at `https://ms-petly.onrender.com`.
+
+Environment variables control the base URL used for requests. Vite will expose any variable prefixed with `VITE_` via `import.meta.env`.
+
+Files are provided for convenience:
+
+- `.env` – used during development (`http://localhost:8080`).
+- `.env.production` – baked into the build for production (`https://ms-petly.onrender.com`).
+
+You can override these values by creating your own `.env.local` or setting the variables in the hosting environment.
+
+A minimal API service has been added under `src/services/api.ts` containing a `registerUser` function that posts to `/users`.
+
+The registration page (`src/views/Register.vue`) now collects user input, validates it, and calls the service; on success it navigates to the login page.
+
+Make sure the backend is running before attempting to register a user. Example cURL call:
+
+```bash
+curl -X POST http://localhost:8080/users \
+  -H 'Content-Type: application/json' \
+  -d '{"name":"Test","email":"test@example.com","crmv":"12345","password":"secret"}'
+```
+
+
+
 ## Recommended IDE Setup
 
 [VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
