@@ -4,6 +4,7 @@ import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import ForgotPassword from '../views/ForgotPassword.vue'
 import AuthTest from '../views/AuthTest.vue'
+import { isAuthenticated } from '@/services/api'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,8 +33,21 @@ const router = createRouter({
       path: '/authtest',
       name: 'authtest',
       component: AuthTest,
+      meta: { requiresAuth: true },
     },
   ],
+})
+
+// global guard: protect routes with `meta.requiresAuth` and redirect logged-in users away from login
+router.beforeEach((to, from, next) => {
+  const authenticated = isAuthenticated()
+  if (to.meta && (to.meta as any).requiresAuth && !authenticated) {
+    return next({ name: 'login' })
+  }
+  if (to.name === 'login' && authenticated) {
+    return next({ name: 'authtest' })
+  }
+  return next()
 })
 
 export default router
