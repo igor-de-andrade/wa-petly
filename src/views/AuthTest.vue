@@ -6,7 +6,8 @@ import { logout, getCurrentUser } from '@/services/api'
 import type { User } from '@/services/api'
 
 const router = useRouter()
-const userName = ref('fulano')
+const userName = ref('')
+const loading = ref(true)
 
 async function fetchUser() {
   try {
@@ -14,6 +15,8 @@ async function fetchUser() {
     userName.value = user.nome
   } catch (err) {
     console.error('could not load user data', err)
+  } finally {
+    loading.value = false
   }
 }
 
@@ -28,15 +31,20 @@ function handleLogout() {
 </script>
 
 <template>
-  <div class="content">
-    <h1>Olá, {{ userName }}! 🙋</h1>
-    <p>Você está na área autenticada.</p>
-    <p>
-      As telas da área interna do sistema ainda estão em construção. Em breve essa tela será
-      substituída.
-    </p>
+  <div>
+    <div v-if="loading" class="content">
+      <p>Carregando...</p>
+    </div>
+    <div v-else class="content">
+      <h1>Olá, {{ userName }}! 🙋</h1>
+      <p>Você está na área autenticada.</p>
+      <p>
+        As telas da área interna do sistema ainda estão em construção. Em breve essa tela será
+        substituída.
+      </p>
 
-    <BaseButton variant="tertiary" label="Sair" @click="handleLogout" />
+      <BaseButton variant="tertiary" label="Sair" @click="handleLogout" />
+    </div>
   </div>
 </template>
 
