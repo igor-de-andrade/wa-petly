@@ -1,7 +1,45 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
 import BaseInput from '../components/base/BaseInput.vue'
 import BaseButton from '../components/base/BaseButton.vue'
-import BaseText from '../components/base/BaseText.vue'
+
+import { login, isAuthenticated } from '@/services/api'
+import { useToast } from '@/composables/useToast'
+
+const email = ref('')
+const senha = ref('')
+const router = useRouter()
+const { showSuccess, showError, showWarning } = useToast()
+
+// redirect away from login if already authenticated
+if (isAuthenticated()) {
+  router.replace('/home')
+}
+
+function validate() {
+  const missing: string[] = []
+  if (!email.value || !String(email.value).trim()) missing.push('Email')
+  if (!senha.value || !String(senha.value).trim()) missing.push('Senha')
+  return missing
+}
+
+async function submit() {
+  const missing = validate()
+  if (missing.length) {
+    showWarning(`Preencha os campos: ${missing.join(', ')}`)
+    return
+  }
+
+  try {
+    await login({ email: email.value, senha: senha.value })
+    showSuccess('Login realizado com sucesso!')
+    setTimeout(() => router.push('/home'), 800)
+  } catch (err: any) {
+    showError(err?.message || 'Falha ao efetuar login.')
+  }
+}
 </script>
 
 <template>
@@ -10,25 +48,37 @@ import BaseText from '../components/base/BaseText.vue'
       <img class="banner" src="../../public/login_image.png" />
     </section>
     <section class="login-area">
-      <img class="logo" src="../../public/logo.png" />
-      <h1>Olá, bem-vindo(a) ao Petly!</h1>
+      <img class="logo" test-id="logo-petly" src="../../public/logo.png" />
+      <h1 class="page-title" test-id="titulo-formulario">Olá, bem-vindo(a) ao Petly!</h1>
       <div class="form">
-        <BaseInput type="email" placeholder="Digite seu e-mail" icon="fa-solid fa-envelope" />
+        <BaseInput
+          v-model="email"
+          type="email"
+          test-id="ipt-email"
+          placeholder="Digite seu e-mail"
+          icon="fa-solid fa-envelope"
+        />
 
-        <BaseInput type="password" placeholder="Digite sua senha" icon="fa-solid fa-lock" />
+        <BaseInput
+          v-model="senha"
+          type="password"
+          test-id="ipt-senha"
+          placeholder="Digite sua senha"
+          icon="fa-solid fa-lock"
+        />
 
-        <BaseButton label="Entrar" />
+        <BaseButton test-id="btn-entrar" label="Entrar" @click="submit" />
 
         <div class="aditional-actions">
-          <BaseText>
+          <p class="regular-text" test-id="txt-esqueceu-senha">
             Esqueceu sua senha?
             <RouterLink to="/forgotpassword">Clique aqui</RouterLink>
-          </BaseText>
+          </p>
 
-          <BaseText>
+          <p class="regular-text" test-id="txt-criar-conta">
             Crie sua conta no
             <RouterLink to="/register">Petly</RouterLink>
-          </BaseText>
+          </p>
         </div>
       </div>
     </section>
@@ -78,8 +128,8 @@ import BaseText from '../components/base/BaseText.vue'
   justify-content: space-between;
 }
 
-h1 {
-  font-family: var(--base-font);
-  color: #1976d2;
+.page-title {
+  color: var(--primary-color);
+  padding: 20px 0px;
 }
 </style>

@@ -2,9 +2,22 @@
 
 :root {
   --base-font: 'Inter', sans-serif;
+  --primary-color: #1976d2;
+}
+
+* {
+  margin: 0;
+  padding: 0;
 }
 
 body {
   height: 100%;
-  margin: 0;
+}
+
+h1, h2, h3, p {
+  font-family: var(--base-font);
+}
+
+.regular-text {
+  font-size: 14px;
 }

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ref, computed } from 'vue'
+
 /* =========================
  * Props
  * ========================= */
@@ -27,6 +29,20 @@ const props = withDefaults(defineProps<BaseInputProps>(), {
 })
 
 /* =========================
+ * State
+ * ========================= */
+const showPassword = ref(false)
+
+const inputType = computed(() => {
+  if (props.type === 'password' && !showPassword.value) {
+    return 'password'
+  }
+  return props.type === 'password' && showPassword.value ? 'text' : props.type
+})
+
+const isPasswordField = computed(() => props.type === 'password')
+
+/* =========================
  * Emits
  * ========================= */
 const emit = defineEmits<{
@@ -39,6 +55,10 @@ const emit = defineEmits<{
 function onInput(event: Event) {
   const target = event.target as HTMLInputElement
   emit('update:modelValue', target.value)
+}
+
+function togglePasswordVisibility() {
+  showPassword.value = !showPassword.value
 }
 </script>
 
@@ -57,13 +77,25 @@ function onInput(event: Event) {
       <!-- Input -->
       <input
         :id="id"
-        :type="type"
+        :type="inputType"
         :placeholder="placeholder"
         :value="modelValue"
         :disabled="disabled"
         @input="onInput"
-        :class="{ 'with-icon': icon }"
+        :class="{ 'with-icon': icon, 'with-toggle': isPasswordField }"
       />
+
+      <!-- Botão de visibilidade da senha -->
+      <button
+        v-if="isPasswordField"
+        type="button"
+        class="password-toggle"
+        :aria-label="showPassword ? 'Ocultar senha' : 'Mostrar senha'"
+        @click="togglePasswordVisibility"
+        tabindex="-1"
+      >
+        <i :class="showPassword ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"></i>
+      </button>
     </div>
 
     <!-- Microcópia -->
@@ -111,12 +143,40 @@ input {
   padding-left: 32px;
 }
 
+.input-wrapper input.with-toggle {
+  padding-right: 32px;
+}
+
 .input-icon {
   position: absolute;
   left: 10px;
   top: 50%;
   transform: translateY(-50%);
   color: #666;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  padding: 4px 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.password-toggle:hover {
+  color: #333;
+}
+
+.password-toggle:focus {
+  outline: none;
 }
 
 .has-error input {

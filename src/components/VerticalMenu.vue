@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
+import { logout, getCurrentUser } from '@/services/api'
+
+const router = useRouter()
+
 interface MenuItem {
   label: string
   to: string
@@ -8,16 +13,15 @@ interface MenuItem {
 const menuItems: MenuItem[] = [
   { label: 'Início', to: '/home', icon: 'fa-solid fa-house' },
   { label: 'Agenda', to: '/agenda', icon: 'fa-solid fa-calendar' },
-  { label: 'Responsáveis', to: '/responsaveis', icon: 'fa-solid fa-users' },
+  { label: 'Responsáveis', to: '/responsible', icon: 'fa-solid fa-users' },
   { label: 'Animais', to: '/animais', icon: 'fa-solid fa-paw' },
   { label: 'Histórico', to: '/historico', icon: 'fa-solid fa-clock-rotate-left' },
   { label: 'Internações', to: '/internacoes', icon: 'fa-solid fa-kit-medical' },
-  { label: 'Configurações', to: '/configuracoes', icon: 'fa-solid fa-gear' },
 ]
 
-function logout() {
-  console.log('logout')
-  // aqui você pode limpar token, redirecionar etc
+function handleLogout() {
+  logout()
+  router.push('/login')
 }
 </script>
 
@@ -49,7 +53,11 @@ function logout() {
 
     <!-- Rodapé -->
     <div class="menu-footer">
-      <button class="menu-item logout" @click="logout">
+      <button class="menu-item aditional-actions">
+        <i class="fa-solid fa-gear"></i>
+        <span>Configurações</span>
+      </button>
+      <button class="menu-item aditional-actions" @click="handleLogout">
         <i class="fa-solid fa-arrow-right-from-bracket"></i>
         <span>Sair</span>
       </button>
@@ -73,7 +81,10 @@ function logout() {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+}
+
+h1 {
+  margin: 0;
 }
 
 .menu-header img {
@@ -86,7 +97,7 @@ function logout() {
 }
 
 .logo {
-  border-radius: 24px;
+  border-radius: 100px;
 }
 
 hr {
@@ -127,7 +138,7 @@ hr {
   font-weight: 600;
 }
 
-.logout {
+.aditional-actions {
   background: transparent;
   border: none;
   width: 100%;
