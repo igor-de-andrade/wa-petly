@@ -41,11 +41,13 @@ const router = createRouter({
       path: '/home',
       name: 'home',
       component: Home,
+      meta: { requiresAuth: true },
     },
     {
       path: '/responsible',
       name: 'responsible',
       component: Responsible,
+      meta: { requiresAuth: true },
     },
   ],
 })
@@ -57,7 +59,7 @@ router.beforeEach((to, from, next) => {
     return next({ name: 'login' })
   }
   if (to.name === 'login' && authenticated) {
-    return next({ name: 'authtest' })
+    return next({ name: 'home' })
   }
   return next()
 })

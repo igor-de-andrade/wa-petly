@@ -1,5 +1,26 @@
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
 import BaseInput from './base/BaseInput.vue'
+import { getCurrentUser } from '@/services/api'
+import type { User } from '@/services/api'
+
+const userName = ref('')
+const loading = ref(true)
+
+async function fetchUser() {
+  try {
+    const user: User = await getCurrentUser()
+    userName.value = user.nome
+  } catch (err) {
+    console.error('could not load user data', err)
+  } finally {
+    loading.value = false
+  }
+}
+
+onMounted(() => {
+  fetchUser()
+})
 </script>
 
 <template>
@@ -28,7 +49,7 @@ import BaseInput from './base/BaseInput.vue'
       <!-- Usuário -->
       <div class="user">
         <div class="user-info">
-          <strong>Dr. Silva</strong>
+          <strong>{{ userName }}</strong>
           <span>Veterinário</span>
         </div>
 

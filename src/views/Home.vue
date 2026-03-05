@@ -6,6 +6,27 @@ import Card from '@/components/Card.vue'
 import BaseList from '@/components/list/BaseList.vue'
 import BaseListRow from '@/components/list/BaseListRow.vue'
 import BaseListCell from '@/components/list/BaseListCell.vue'
+import { ref, onMounted } from 'vue'
+import { getCurrentUser } from '@/services/api'
+import type { User } from '@/services/api'
+
+const userName = ref('')
+const loading = ref(true)
+
+async function fetchUser() {
+  try {
+    const user: User = await getCurrentUser()
+    userName.value = user.nome
+  } catch (err) {
+    console.error('could not load user data', err)
+  } finally {
+    loading.value = false
+  }
+}
+
+onMounted(() => {
+  fetchUser()
+})
 </script>
 
 <template>
@@ -15,7 +36,7 @@ import BaseListCell from '@/components/list/BaseListCell.vue'
       <NavBar />
       <div class="page-details">
         <div class="welcome-message">
-          <h1>Olá, Dr. Silva!</h1>
+          <h1>Olá, {{ userName }}!</h1>
           <p>Aqui está o resumo da sua clinica hoje.</p>
         </div>
         <div class="cards">
