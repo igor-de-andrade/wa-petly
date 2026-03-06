@@ -28,15 +28,23 @@ interface LoginPayload {
 const TOKEN_KEY = 'auth_token'
 
 export function setToken(token: string) {
-  try { localStorage.setItem(TOKEN_KEY, token) } catch {}
+  try {
+    localStorage.setItem(TOKEN_KEY, token)
+  } catch {}
 }
 
 export function getToken(): string | null {
-  try { return localStorage.getItem(TOKEN_KEY) } catch { return null }
+  try {
+    return localStorage.getItem(TOKEN_KEY)
+  } catch {
+    return null
+  }
 }
 
 export function removeToken() {
-  try { localStorage.removeItem(TOKEN_KEY) } catch {}
+  try {
+    localStorage.removeItem(TOKEN_KEY)
+  } catch {}
 }
 
 export function logout() {
@@ -49,9 +57,14 @@ function parseJwt(token: string | null) {
     const parts = token.split('.')
     if (parts.length < 2) return null
     const payload = (parts[1] || '').replace(/-/g, '+').replace(/_/g, '/')
-    const json = decodeURIComponent(atob(payload).split('').map(function(c) {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-    }).join(''))
+    const json = decodeURIComponent(
+      atob(payload)
+        .split('')
+        .map(function (c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+        })
+        .join(''),
+    )
     return JSON.parse(json)
   } catch {
     return null
@@ -109,12 +122,15 @@ export async function registerUser(payload: RegisterPayload): Promise<void> {
         // errors key
         else if (body.errors) {
           if (Array.isArray(body.errors)) {
-            message = body.errors.map((e: any) => (typeof e === 'string' ? e : JSON.stringify(e))).join('\n')
+            message = body.errors
+              .map((e: any) => (typeof e === 'string' ? e : JSON.stringify(e)))
+              .join('\n')
           } else if (typeof body.errors === 'object') {
             const parts: string[] = []
             for (const k of Object.keys(body.errors)) {
               const v = body.errors[k]
-              if (Array.isArray(v)) parts.push(...v.map((s: any) => (typeof s === 'string' ? s : JSON.stringify(s))))
+              if (Array.isArray(v))
+                parts.push(...v.map((s: any) => (typeof s === 'string' ? s : JSON.stringify(s))))
               else parts.push(String(v))
             }
             if (parts.length) message = parts.join('\n')
@@ -127,7 +143,8 @@ export async function registerUser(payload: RegisterPayload): Promise<void> {
           for (const k of Object.keys(body)) {
             const v = body[k]
             if (typeof v === 'string') parts.push(v)
-            else if (Array.isArray(v)) parts.push(...v.map((s: any) => (typeof s === 'string' ? s : JSON.stringify(s))))
+            else if (Array.isArray(v))
+              parts.push(...v.map((s: any) => (typeof s === 'string' ? s : JSON.stringify(s))))
           }
           if (parts.length) message = parts.join('\n')
         }
@@ -164,7 +181,8 @@ export async function login(payload: LoginPayload): Promise<string> {
           for (const k of Object.keys(body)) {
             const v = body[k]
             if (typeof v === 'string') parts.push(v)
-            else if (Array.isArray(v)) parts.push(...v.map((s: any) => (typeof s === 'string' ? s : JSON.stringify(s))))
+            else if (Array.isArray(v))
+              parts.push(...v.map((s: any) => (typeof s === 'string' ? s : JSON.stringify(s))))
           }
           if (parts.length) message = parts.join('\n')
         }
@@ -188,6 +206,55 @@ export interface User {
   nome: string
   email: string
   crmv: string
+}
+
+// --- tutors --------------------------------------------------------------
+export interface Tutor {
+  id: number
+  nome: string
+  cpf: string
+  rg: string | null
+  dataNascimento: string | null
+  genero: 'MASCULINO' | 'FEMININO' | string
+  celular: string
+}
+
+/**
+ * Returns a list of tutors from the backend.  If a token is available the
+ * request will include the Authorization header automatically.
+ */
+export async function getTutors(): Promise<Tutor[]> {
+  const url = `${getBaseUrl()}/tutors`
+  const token = getToken()
+  const headers: Record<string, string> = {}
+  if (token) headers['Authorization'] = `Bearer ${token}`
+
+  const response = await fetch(url, { headers })
+  if (!response.ok) {
+    const text = await response.text()
+    throw new Error(`failed to fetch tutors: ${response.status} ${text}`)
+  }
+  const data = await response.json()
+  return data as Tutor[]
+}
+
+/**
+ * Delete tutor by id.
+ */
+export async function deleteTutor(id: number): Promise<void> {
+  const url = `${getBaseUrl()}/tutors/${id}`
+  const token = getToken()
+  const headers: Record<string, string> = {}
+  if (token) headers['Authorization'] = `Bearer ${token}`
+
+  const response = await fetch(url, {
+    method: 'DELETE',
+    headers,
+  })
+  if (!response.ok) {
+    const text = await response.text()
+    throw new Error(`failed to delete tutor: ${response.status} ${text}`)
+  }
 }
 
 /**
