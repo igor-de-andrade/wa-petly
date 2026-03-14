@@ -124,7 +124,6 @@ input {
 }
 
 .label {
-  font-weight: 500;
   font-size: 14px;
 }
 

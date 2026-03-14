@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import NavBar from '@/components/NavBar.vue'
 import VerticalMenu from '@/components/VerticalMenu.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
@@ -11,6 +12,9 @@ import BaseButton from '@/components/base/BaseButton.vue'
 import { getTutors, deleteTutor } from '@/services/api'
 import type { Tutor } from '@/services/api'
 import { useToast } from '@/composables/useToast'
+
+// router
+const router = useRouter()
 
 // reactive list of tutors fetched from backend
 const tutors = ref<Tutor[]>([])
@@ -57,7 +61,7 @@ async function confirmDelete(id: number) {
     <VerticalMenu />
     <div class="page">
       <NavBar>
-        <BaseButton label="Novo responsável" />
+        <BaseButton label="Novo responsável" @click="router.push({ name: 'createResponsible' })" />
       </NavBar>
       <div class="page-details">
         <h1>Responsáveis</h1>

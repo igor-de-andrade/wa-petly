@@ -258,6 +258,79 @@ export async function deleteTutor(id: number): Promise<void> {
 }
 
 /**
+ * Create a new tutor.
+ */
+export interface CreateTutorPayload {
+  nome: string
+  cpf: string
+  rg?: string
+  dataNascimento?: string
+  genero: string
+  celular: string
+  email?: string
+  cep?: string
+  logradouro?: string
+  numero?: string
+  complemento?: string
+  bairro?: string
+  cidade?: string
+  uf?: string
+}
+
+export async function createTutor(payload: CreateTutorPayload): Promise<Tutor> {
+  const url = `${getBaseUrl()}/tutors`
+  const token = getToken()
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  }
+  if (token) headers['Authorization'] = `Bearer ${token}`
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(payload),
+  })
+
+  if (!response.ok) {
+    let message = `failed to create tutor: ${response.status}`
+    try {
+      const body = await response.json()
+      if (body.message && typeof body.message === 'string') {
+        message = body.message
+      } else if (body.errors) {
+        if (Array.isArray(body.errors)) {
+          message = body.errors
+            .map((e: any) => (typeof e === 'string' ? e : JSON.stringify(e)))
+            .join('\n')
+        } else if (typeof body.errors === 'object') {
+          const parts: string[] = []
+          for (const k of Object.keys(body.errors)) {
+            const v = body.errors[k]
+            if (Array.isArray(v))
+              parts.push(...v.map((s: any) => (typeof s === 'string' ? s : JSON.stringify(s))))
+            else parts.push(String(v))
+          }
+          if (parts.length) message = parts.join('\n')
+        }
+      } else if (typeof body === 'object') {
+        const parts: string[] = []
+        for (const k of Object.keys(body)) {
+          const v = body[k]
+          if (typeof v === 'string') parts.push(v)
+          else if (Array.isArray(v))
+            parts.push(...v.map((s: any) => (typeof s === 'string' ? s : JSON.stringify(s))))
+        }
+        if (parts.length) message = parts.join('\n')
+      }
+    } catch {}
+    throw new Error(message)
+  }
+
+  const data = await response.json()
+  return data as Tutor
+}
+
+/**
  * Fetch the authenticated user's data from `/users/me`.
  *
  * The request includes the Authorization header if a token is stored.

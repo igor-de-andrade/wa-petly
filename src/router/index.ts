@@ -7,6 +7,7 @@ import AuthTest from '../views/AuthTest.vue'
 import { isAuthenticated } from '@/services/api'
 import Home from '../views/Home.vue'
 import Responsible from '../views/Responsible.vue'
+import CreateResponsible from '../views/CreateResponsible.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -47,6 +48,12 @@ const router = createRouter({
       path: '/responsible',
       name: 'responsible',
       component: Responsible,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/responsible/create',
+      name: 'createResponsible',
+      component: CreateResponsible,
       meta: { requiresAuth: true },
     },
   ],
